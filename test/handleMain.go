@@ -12,7 +12,7 @@ import (
 )
 
 func getToken(usrDetail Cred) (*Token, error) {
-	url := "http://15.207.111.248/v3/token"
+	url := usrDetail.Host + "/v3/token"
 	method := "POST"
 
 	bodyContent := fmt.Sprintf("{\"code\": \"%s:%s\", \"authProvider\": \"localAuthConfig\"}", usrDetail.UserName, usrDetail.Password)
@@ -35,7 +35,7 @@ func getToken(usrDetail Cred) (*Token, error) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	if res.Status != "201" {
+	if res.StatusCode != 201 {
 		fmt.Println("Credentilas provided is not correct ", res.Status)
 		// return "", "", nil
 	}
