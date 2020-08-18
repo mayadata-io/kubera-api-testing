@@ -8,7 +8,8 @@ import (
 
 // SuccessRequest for ,if request success then to get token
 type SuccessRequest struct {
-	Token string `json:"jwt"`
+	Token     string `json:"jwt"`
+	AccountID string `json:"accountId"`
 }
 
 // FailedRequest fail return error
@@ -23,18 +24,20 @@ type UserData struct {
 	Host     string
 }
 
+// PostResponse for defining the response of postmethod
 type PostResponse struct {
 	Resp       *resty.Response
 	Token      string
 	Message    string
 	Error      error
 	StatusCode int
+	AccountID  string
 	// Body    []byte
 }
 
-type HttpPost interface {
-	getToken() PostResponse
-}
+// type HttpPost interface {
+// 	getToken() PostResponse
+// }
 
 func (u UserData) getToken() *PostResponse {
 	client := resty.New()
@@ -57,7 +60,38 @@ func (u UserData) getToken() *PostResponse {
 		Resp:    resp,
 		// Body:    resp.Body(),
 		StatusCode: resp.StatusCode(),
+		AccountID:  token.AccountID,
 	}
 	return &sendResp
 
+}
+
+// GetReqResponse structure of GET response
+type GetReqResponse struct {
+	Error      error
+	Resp       *resty.Response
+	StatusCode int
+}
+
+// getRequest func is to make GET method requests
+func (p PostResponse) getRequest(api string) *GetReqResponse {
+	fmt.Println("api-----", api)
+	client := resty.New()
+
+	url := api + p.AccountID
+	header := fmt.Sprintf("token= %s; authProvider=localAuthConfig", p.Token)
+
+	resp, err := client.R().
+		SetHeader("Cookie", header).
+		Get(url)
+
+	printOutput(resp, err) // To Check the respose
+	return &GetReqResponse{
+		Error:      err,
+		Resp:       resp,
+		StatusCode: resp.StatusCode(),
+	}
+}
+func printOutput(resp *resty.Response, err error) {
+	fmt.Println(resp, err)
 }
