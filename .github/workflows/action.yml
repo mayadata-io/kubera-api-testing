@@ -1,0 +1,40 @@
+
+name: Github action to create EKS cluster using eksctl and install DOP on it
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install eksctl
+      run: |
+        curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+        sudo mv /tmp/eksctl /usr/local/bin
+        sleep 10
+        eksctl version
+
+    - name: Configure AWS credentials from secrets
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+        
+    - name: Create EKS cluster using eksctl
+      run: |
+        eksctl create cluster --name=test --node-type=t2.xlarge
+        kubectl get nodes -owide
+        sleep 200
+        kubectl get pod -A
+    
+    - name: Checkout
+      uses: actions/checkout@master
+    
+    - name: Install DOP on cluster
+      run: |
+        chmod +x ./dop.sh
+        ./dop.sh
+
+    - name: Cluster cleanup
+      run: |
+        eksctl delete cluster --name=test
+        
