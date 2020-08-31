@@ -12,6 +12,14 @@ const (
 	kuberaPass = "KUBERA_PASS" //Kubera password
 )
 
+type UserForm struct {
+	Host      string
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+}
+
 // Connection defines the structure of userCerdentials
 type Connection struct {
 	HostName string
