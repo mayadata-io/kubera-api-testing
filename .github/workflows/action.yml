@@ -1,0 +1,40 @@
+name: Github action to create EKS cluster using eksctl and install DOP on it
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:    
+    - name: Checkout code
+      uses: actions/checkout@master
+
+    - name: Run Shellcheck
+      uses: bewuethr/shellcheck-action@v2
+
+    - name: Install eksctl and create EKS cluster
+      run: |
+        chmod +x ./eks/install_eks.sh
+        ./eks/install_eks.sh
+      env:
+        ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: Install kubera on cluster
+      run: |
+        chmod +x ./eks/install_kubera_on_eks.sh
+        ./eks/install_kubera_on_eks.sh
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
+        GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+        GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+        KUBERA_BRANCH: ${{ secrets.KUBERA_BRANCH }}
+        RELEASE: ${{ secrets.RELEASE }}
+        USE_KUBERA_REPO: ${{ secrets.USE_KUBERA_REPO }}
+
+
+    - name: Cluster and kubera cleanup
+      run: |
+        chmod +x ./eks/cleanup.sh
+        ./eks/cleanup.sh
+      if: always()
