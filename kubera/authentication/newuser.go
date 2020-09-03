@@ -7,7 +7,7 @@ import (
 	conn "github.com/mayadata-io/kubera-api-testing/kubera/connection"
 )
 
-type SignUp struct {
+type NewUserForm struct {
 	Fname       string `json:"firstName"`
 	Lname       string `json:"lastName"`
 	Credentials Cred   `json:"password"`
@@ -18,11 +18,13 @@ type Cred struct {
 	Password string `json:"secretValue"`
 }
 
-type UserFetching struct {
+// UserCreate Contains the user form structure
+type UserCreate struct {
 	conn.UserForm `json:"connection"`
 }
 
-func (t UserFetching) String() string {
+// String print UserCreate in pretty format
+func (t UserCreate) String() string {
 	if t.Password != "" {
 		t.Password = "XXXX"
 	}
@@ -37,23 +39,22 @@ func (t UserFetching) String() string {
 	return string(raw)
 }
 
-type UserFetchingConfig struct {
+type UserCreateConfig struct {
 	UserForm conn.UserForm
 }
 
-// NewUserFetcher returns a new instance of UserFetching
-func NewUserFetcher(config UserFetchingConfig) *UserFetching {
-	return &UserFetching{
+// NewUserCreator returns a new instance of UserCreate
+func NewUserCreator(config UserCreateConfig) *UserCreate {
+	return &UserCreate{
 		UserForm: config.UserForm,
 	}
 }
 
-// Fetch returns authenticated token
-func (d *UserFetching) userSignup() (Token, error) {
+// Create returns authenticated token
+func (d *UserCreate) Create() (Token, error) {
 	client := resty.New()
-	// url := "http://13.235.58.229/v3/localauthconfig/"
 	url := d.Host + "v3/localauthconfig/"
-	form := SignUp{
+	form := NewUserForm{
 		Fname: d.FirstName,
 		Lname: d.LastName,
 		Credentials: Cred{

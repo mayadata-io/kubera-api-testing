@@ -101,14 +101,12 @@ func TestCreateNewUser(t *testing.T) {
 			Password: "P@ssw0rd",
 			IsError:  true,
 		},
-		// Without Lastname also create user
-		// "No lastName": {
-		// 	HostName:  connection.HostName,
-		// 	FirstName: "test",
-		// 	Email:     "test@test.io",
-		// 	Password:  "P@ssw0rd",
-		// 	IsError:   true,
-		// },
+		"No lastName": {
+			HostName:  connection.HostName,
+			FirstName: "test",
+			Email:     "test@test.io",
+			Password:  "P@ssw0rd",
+		},
 		"No Email": {
 			HostName:  connection.HostName,
 			FirstName: "test",
@@ -144,7 +142,7 @@ func TestCreateNewUser(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			fetcher := NewUserFetcher(UserFetchingConfig{
+			creator := NewUserCreator(UserCreateConfig{
 				UserForm: conn.UserForm{
 					Host:      mock.HostName,
 					FirstName: mock.FirstName,
@@ -153,12 +151,12 @@ func TestCreateNewUser(t *testing.T) {
 					Password:  mock.Password,
 				},
 			})
-			newUser, err := fetcher.userSignup()
+			createUser, err := creator.Create()
 			if !mock.IsError && err != nil {
-				t.Fatalf("Expected no error got=%s: \nFetcher=%s: \nToken=%s", err, fetcher, newUser)
+				t.Fatalf("Expected no error got=%s: \nCreator=%s: \nToken=%s", err, creator, createUser)
 			}
 			if mock.IsError && err == nil {
-				t.Fatalf("Expected error got none:  \nFetcher=%s: \nToken=%s", fetcher, newUser)
+				t.Fatalf("Expected error got none:  \nCreator=%s: \nToken=%s", creator, createUser)
 			}
 		})
 	}
