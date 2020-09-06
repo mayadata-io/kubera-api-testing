@@ -72,8 +72,8 @@ func TestCreateNewUser(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			creator := NewUserCreator(UserCreateConfig{
-				UserForm: conn.UserForm{
+			creator := NewUserCreator(UserCreationConfig{
+				UserForm: conn.Account{
 					Host:      mock.HostName,
 					FirstName: mock.FirstName,
 					LastName:  mock.LastName,

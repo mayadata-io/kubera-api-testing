@@ -7,24 +7,24 @@ import (
 	conn "github.com/mayadata-io/kubera-api-testing/kubera/connection"
 )
 
-type NewUserForm struct {
-	Fname       string `json:"firstName"`
-	Lname       string `json:"lastName"`
-	Credentials Cred   `json:"password"`
+type User struct {
+	FirstName   string   `json:"firstName"`
+	LastName    string   `json:"lastName"`
+	Credentials UserCred `json:"password"`
 }
 
-type Cred struct {
+type UserCred struct {
 	Email    string `json:"publicValue"`
 	Password string `json:"secretValue"`
 }
 
-// UserCreate Contains the user form structure
-type UserCreate struct {
-	conn.UserForm `json:"connection"`
+// UserCreation Contains the user form structure
+type UserCreation struct {
+	conn.Account `json:"connection"`
 }
 
-// String print UserCreate in pretty format
-func (t UserCreate) String() string {
+// String print UserCreation in pretty format
+func (t UserCreation) String() string {
 	if t.Password != "" {
 		t.Password = "XXXX"
 	}
@@ -39,27 +39,27 @@ func (t UserCreate) String() string {
 	return string(raw)
 }
 
-type UserCreateConfig struct {
-	UserForm conn.UserForm
+type UserCreationConfig struct {
+	UserForm conn.Account
 }
 
-// NewUserCreator returns a new instance of UserCreate
-func NewUserCreator(config UserCreateConfig) *UserCreate {
-	return &UserCreate{
-		UserForm: config.UserForm,
+// NewUserCreator returns a new instance of UserCreation
+func NewUserCreator(config UserCreationConfig) *UserCreation {
+	return &UserCreation{
+		Account: config.UserForm,
 	}
 }
 
 // Create returns authenticated token
-func (d *UserCreate) Create() (Token, error) {
+func (u *UserCreation) Create() (Token, error) {
 	client := resty.New()
-	url := d.Host + "v3/localauthconfig/"
-	form := NewUserForm{
-		Fname: d.FirstName,
-		Lname: d.LastName,
-		Credentials: Cred{
-			Email:    d.Email,
-			Password: d.Password,
+	url := u.Host + "v3/localauthconfig/"
+	form := User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Credentials: UserCred{
+			Email:    u.Email,
+			Password: u.Password,
 		},
 	}
 	token := Token{}

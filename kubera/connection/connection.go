@@ -12,7 +12,7 @@ const (
 	kuberaPass = "KUBERA_PASS" //Kubera password
 )
 
-type UserForm struct {
+type Account struct {
 	Host      string
 	FirstName string
 	LastName  string
