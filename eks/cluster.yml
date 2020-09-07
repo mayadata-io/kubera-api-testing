@@ -1,0 +1,12 @@
+# This yaml will create eks cluster
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: kubera-api-testing
+  region: us-east-2
+  version: 1.16
+nodeGroups:
+  - name: kubera-api-testing
+    instanceType: t3.xlarge
+    desiredCapacity: 2
+    volumeSize: 80

@@ -1,0 +1,695 @@
+apiVersion: dope.mayadata.io/v1
+kind: Recipe
+metadata:
+  name: assert-kubera-pod-running
+  namespace: d-testing
+  labels:
+    d-testing.dope.mayadata.io/inference: "true"
+spec:
+  tasks:
+
+  # Check alertmanager pod status
+  - name: assert-running-of-alertmanager
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: alertmanager
+        status:
+          phase: Running
+    
+  # Check alertstore pod status
+  - name: assert-running-of-alertstore
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: alertstore
+        status:
+          phase: Running
+
+  # Check alertstore-tablemanager pod status
+  - name: assert-running-of-alertstore-tablemanager
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: alertstore-tablemanager
+        status:
+          phase: Running
+
+  # Check cassandra pod status
+  - name: assert-running-of-cassandra
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: cassandra
+        status:
+          phase: Running
+
+  # Check chat-server pod status
+  - name: assert-running-of-chat-server
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: chat-server
+        status:
+          phase: Running
+    
+  # Check cloud-agent pod status
+  - name: assert-running-of-cloud-agent
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: cloud-agent
+        status:
+          phase: Running
+
+  # Check configs pod status
+  - name: assert-running-of-configs
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: configs
+        status:
+          phase: Running
+    
+  # Check configs-db pod status
+  - name: assert-running-of-configs-db
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: configs-db
+        status:
+          phase: Running
+
+  # Check consul pod status
+  - name: assert-running-of-consul
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: consul
+        status:
+          phase: Running
+
+  # Check distributor pod status
+  - name: assert-running-of-distributor
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: distributor
+        status:
+          phase: Running
+
+  # Check elastalert pod status
+  - name: assert-running-of-elastalert
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: elastalert
+        status:
+          phase: Running
+
+  # Check ingester pod status
+  - name: assert-running-of-ingester
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: ingester
+        status:
+          phase: Running
+
+  # Check maya-grafana pod status
+  - name: assert-running-of-maya-grafana
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-grafana
+        status:
+          phase: Running
+
+  # Check maya-io pod status
+  - name: assert-running-of-maya-io
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-io
+        status:
+          phase: Running
+
+  # Check maya-ui pod status
+  - name: assert-running-of-maya-ui
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-ui
+        status:
+          phase: Running
+
+  # Check memcached pod status
+  - name: assert-running-of-memcached
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: memcached
+        status:
+          phase: Running
+
+  # Check mysql pod status
+  - name: assert-running-of-mysql
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: mysql
+        status:
+          phase: Running
+
+  # Check od-elasticsearch-logging pod status
+  - name: assert-running-of-od-elasticsearch-logging
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            k8s-app: od-elasticsearch-logging
+        status:
+          phase: Running
+
+  # Check od-kibana-logging pod status
+  - name: assert-running-of-od-kibana-logging
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            k8s-app: od-kibana-logging
+        status:
+          phase: Running
+
+  # Check querier pod status
+  - name: assert-running-of-querier
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: querier
+        status:
+          phase: Running
+
+  # Check ruler pod status
+  - name: assert-running-of-ruler
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: ruler
+        status:
+          phase: Running
+
+  # Check table-manager pod status
+  - name: assert-running-of-table-manager
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: table-manager
+        status:
+          phase: Running
+  - name: assert-running-of-configs-db
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: configs-db
+        status:
+          phase: Running
+
+  # Check consul pod status
+  - name: assert-running-of-consul
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: consul
+        status:
+          phase: Running
+
+  # Check distributor pod status
+  - name: assert-running-of-distributor
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: distributor
+        status:
+          phase: Running
+
+  # Check elastalert pod status
+  - name: assert-running-of-elastalert
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: elastalert
+        status:
+          phase: Running
+
+  # Check ingester pod status
+  - name: assert-running-of-ingester
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: ingester
+        status:
+          phase: Running
+
+  # Check maya-grafana pod status
+  - name: assert-running-of-maya-grafana
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-grafana
+        status:
+          phase: Running
+
+  # Check maya-io pod status
+  - name: assert-running-of-maya-io
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-io
+        status:
+          phase: Running
+
+  # Check maya-ui pod status
+  - name: assert-running-of-maya-ui
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: maya-ui
+        status:
+          phase: Running
+
+  # Check memcached pod status
+  - name: assert-running-of-memcached
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: memcached
+        status:
+          phase: Running
+
+  # Check mysql pod status
+  - name: assert-running-of-mysql
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            app: mysql
+        status:
+          phase: Running
+
+  # Check od-elasticsearch-logging pod status
+  - name: assert-running-of-od-elasticsearch-logging
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            k8s-app: od-elasticsearch-logging
+        status:
+          phase: Running
+
+  # Check od-kibana-logging pod status
+  - name: assert-running-of-od-kibana-logging
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            k8s-app: od-kibana-logging
+        status:
+          phase: Running
+
+  # Check querier pod status
+  - name: assert-running-of-querier
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: querier
+        status:
+          phase: Running
+
+  # Check ruler pod status
+  - name: assert-running-of-ruler
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: ruler
+        status:
+          phase: Running
+
+  # Check table-manager pod status
+  - name: assert-running-of-table-manager
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: table-manager
+        status:
+          phase: Running
+
+  # Check openebs-admission-server pod status
+  - name: assert-running-of-openebs-admission-server
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: admission-webhook
+        status:
+          phase: Running
+  
+  # Check openebs-localpv-provisioner pod status
+  - name: assert-running-of-openebs-localpv-provisioner
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: openebs-localpv-provisioner
+        status:
+          phase: Running
+
+  # Check openebs-apiserver pod status
+  - name: assert-running-of-openebs-apiserver
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: maya-apiserver
+        status:
+          phase: Running
+
+  # Check openebs-ndm-operator pod status
+  - name: assert-running-of-openebs-ndm-operator
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: ndm-operator
+        status:
+          phase: Running
+
+  # Check openebs-provisioner pod status
+  - name: assert-running-of-openebs-provisioner
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: openebs-provisioner
+        status:
+          phase: Running
+  
+  # Check openebs-snapshot-operator pod status
+  - name: assert-running-of-openebs-snapshot-operator
+    assert:
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        count: 1
+      state:
+        kind: Pod
+        apiVersion: v1
+        metadata:
+          namespace: kubera
+          labels:
+            name: openebs-snapshot-operator
+        status:
+          phase: Running
