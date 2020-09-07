@@ -10,19 +10,32 @@ jobs:
     - name: Run Shellcheck
       uses: bewuethr/shellcheck-action@v2
 
-    - name: Install eksctl and create EKS cluster
+    - name: Install eksctl
       run: |
-        chmod +x ./eks/install_eks.sh
-        ./eks/install_eks.sh
+        chmod +x ./eksctl/install.sh
+        ./eksctl/install.sh
+  
+    - name: Configure AWS credentials
+      run: |
+        chmod +x ./eks/aws-credentials.sh
+        ./eks/aws-credentials.sh
       env:
         ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
         SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
+    - name: Create EKS cluster
+      run: |
+        chmod +x ./eks/create.sh
+        ./eks/create.sh
+      env:
+        VERSION: ${{ secrets.VERSION }}
+        REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
     - name: Install kubera on cluster
       run: |
-        chmod +x ./eks/install_kubera_on_eks.sh
-        ./eks/install_kubera_on_eks.sh
+        chmod +x ./kubera/install/install_kubera_on_eks.sh
+        ./kubera/install/install_kubera_on_eks.sh
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
@@ -33,8 +46,22 @@ jobs:
         USE_KUBERA_REPO: ${{ secrets.USE_KUBERA_REPO }}
 
 
-    - name: Cluster and kubera cleanup
+    - name: Apply d-operators based ci to the cluster
       run: |
-        chmod +x ./eks/cleanup.sh
-        ./eks/cleanup.sh
+        kubectl create -f ./ci/ci.yml
+
+    - name: Sanity check for kubera components
+      run: |
+        chmod +x ./scenarios/sanity/suite.sh
+        ./scenarios/sanity/suite.sh
+
+    - name: kubera cleanup
+      run: |
+        chmod +x ./kubera/uninstall/dop-cleanup.sh
+        ./kubera/uninstall/dop-cleanup.sh
+      
+    - name: Cluster cleanup
+      run: |
+        eksctl delete cluster -f ./eks/cluster.yml
       if: always()
+        

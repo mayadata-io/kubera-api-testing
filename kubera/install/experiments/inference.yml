@@ -1,0 +1,88 @@
+# This is an internal recipe used by test suite runner
+# to evaluate if desired experiments (read Recipes) were
+# successful or not
+#
+# NOTE:
+#   This Recipe evaluates number of successful, failed &
+# errored Recipes
+apiVersion: dope.mayadata.io/v1
+kind: Recipe
+metadata:
+  name: inference
+  namespace: d-testing
+  labels:
+    d-testing.dope.mayadata.io/internal: "true"
+spec:
+  # This Recipe is eligible to run only when the checks succeed
+  #
+  # NOTE:
+  #   In this case, this Recipe will be eligible only after the
+  # number of Recipes with matching labels equal the given count
+  #
+  # NOTE:
+  #   Eligibility check will get triggered after above think time 
+  # has elapsed
+  eligible:
+    checks:
+    - labelSelector:
+        matchLabels:
+          d-testing.dope.mayadata.io/inference: "true"
+        matchExpressions:
+        - key: recipe.dope.mayadata.io/phase
+          operator: Exists
+        - key: recipe.dope.mayadata.io/phase
+          operator: NotIn
+          values: 
+          - NotEligible
+      when: ListCountEquals
+      count: 2
+  resync:
+    onNotEligibleResyncInSeconds: 5
+  tasks:
+  # Start with asserting the count of Recipes that should 
+  # complete successfully
+  - name: assert-count-of-tests-that-completed
+    assert: 
+      state: 
+        kind: Recipe
+        apiVersion: dope.mayadata.io/v1
+        metadata:
+          namespace: d-testing
+          labels:
+            d-testing.dope.mayadata.io/inference: "true"
+            recipe.dope.mayadata.io/phase: Completed
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        # These many Recipes should succeed
+        count: 2
+  # Then assert the count of Recipes that should fail
+  - name: assert-count-of-tests-that-failed
+    assert: 
+      state: 
+        kind: Recipe
+        apiVersion: dope.mayadata.io/v1
+        metadata:
+          namespace: d-testing
+          labels:
+            d-testing.dope.mayadata.io/inference: "true"
+            recipe.dope.mayadata.io/phase: Failed
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        # These many Recipes should fail
+        count: 0
+  # Then assert the count of Recipes that should error
+  - name: assert-count-of-tests-that-errored
+    assert: 
+      state: 
+        kind: Recipe
+        apiVersion: dope.mayadata.io/v1
+        metadata:
+          namespace: d-testing
+          labels:
+            d-testing.dope.mayadata.io/inference: "true"
+            recipe.dope.mayadata.io/phase: Error
+      stateCheck:
+        stateCheckOperator: ListCountEquals
+        # These many Recipes should error out
+        count: 0
+---

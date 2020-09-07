@@ -19,10 +19,5 @@ if [[ $CLEAN == true ]]; then
 
     echo -e "\nDelete namespaces maya-system"
     kubectl delete ns maya-system  
-
-    echo -e "\nDelete cluster"
-    eksctl delete cluster --name=kubera-cluster-git-action 
-
-    echo -e "\nGet list of clusters"
-    eksctl get cluster --region=us-east-2
+    
 fi

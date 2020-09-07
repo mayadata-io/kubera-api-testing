@@ -1,0 +1,120 @@
+# This yaml file demonstrates the use of Kubernetes
+# and few custom resources to build a custom CI 
+# framework. In this framework, Kubernetes is the CI
+# runner and custom resources are the test case 
+# implementations.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dope
+---
+# d-testing is the Kubernetes namespace that can
+# be used to deploy any test artifacts
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: d-testing
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+  name: recipes.dope.mayadata.io
+spec:
+  group: dope.mayadata.io
+  names:
+    kind: Recipe
+    listKind: RecipeList
+    plural: recipes
+    shortNames:
+    - rcp
+    singular: recipe
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true
+  additionalPrinterColumns:
+  - name: Age
+    type: date
+    description: Age of this Recipe
+    JSONPath: .metadata.creationTimestamp
+  - name: TimeTaken
+    type: string
+    description: Time taken to execute this Recipe
+    JSONPath: .status.executionTime.readableValue
+  - name: Status
+    type: string
+    description: Current phase of this Recipe
+    JSONPath: .status.phase
+  - name: Reason
+    type: string
+    description: Description of this phase
+    JSONPath: .status.reason
+---
+# dope is the Kubernetes service account that has
+# all priviledges to manage any Kubernetes resources
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dope
+  namespace: dope
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dope
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dope
+subjects:
+- kind: ServiceAccount
+  name: dope
+  namespace: dope
+roleRef:
+  kind: ClusterRole
+  name: dope
+  apiGroup: rbac.authorization.k8s.io
+---
+# This StatefulSet deploys dope
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.mayadata.io/name: dope
+  name: dope
+  namespace: dope
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.mayadata.io/name: dope
+  serviceName: ""
+  template:
+    metadata:
+      labels:
+        app.mayadata.io/name: dope
+    spec:
+      serviceAccountName: dope
+      containers:
+      - name: dope
+        image: mayadataio/dope:v1.9.0
+        command: ["/usr/bin/dope"]
+        args:
+        - --logtostderr
+        - --run-as-local
+        - -v=1
+        - --discovery-interval=30s
+        - --cache-flush-interval=240s
