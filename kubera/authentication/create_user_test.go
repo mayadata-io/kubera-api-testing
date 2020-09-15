@@ -50,6 +50,34 @@ func TestCreateNewUser(t *testing.T) {
 			Password:  "P@ssw0rd",
 			IsError:   true,
 		},
+		"With invalid weak password": {
+			FirstName: "test",
+			LastName:  "testF",
+			Email:     "testing123@test.io",
+			Password:  "abcde",
+			IsError:   true,
+		},
+		"With invalid long character password": {
+			FirstName: "test",
+			LastName:  "testF",
+			Email:     "testing123@test.io",
+			Password:  "testingOnlyCharacter",
+			IsError:   true,
+		},
+		"With invalid numeric password": {
+			FirstName: "test",
+			LastName:  "testF",
+			Email:     "testing123@test.io",
+			Password:  "1234567890",
+			IsError:   true,
+		},
+		"With invalid one special character password": {
+			FirstName: "test",
+			LastName:  "testF",
+			Email:     "testing123@test.io",
+			Password:  "testing!",
+			IsError:   true,
+		},
 	}
 
 	for name, mock := range tests {
