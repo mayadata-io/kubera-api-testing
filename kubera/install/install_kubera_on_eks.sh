@@ -46,9 +46,6 @@ then
 
 else
 
-  echo -e "\nDeploying Kubera using official Kubera charts\n"
-  helm repo update
-
   echo -e "\nAdd kubera in local repository"
   helm repo add kubera https://charts.mayadata.io/
 
