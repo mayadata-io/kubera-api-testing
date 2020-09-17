@@ -14,6 +14,9 @@ kubectl apply -f ./kubera/install/experiments/assert-kubera-pod.yaml
 echo -e "\n Apply kubera sanity test experiments to cluster for svc"
 kubectl apply -f ./kubera/install/experiments/assert-kubera-svc.yaml
 
+echo -e "\n Apply kubera sanity test experiments to check ip for service"
+kubectl apply -f ./kubera/install/experiments/assert-kubera-svc-ip.yaml
+
 echo -e "\n Apply inference to cluster"
 kubectl apply -f ./kubera/install/experiments/inference.yml
 
