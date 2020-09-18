@@ -1,0 +1,303 @@
+apiVersion: dope.mayadata.io/v1
+kind: Recipe 
+metadata:
+  name: assert-if-kubera-services-ip-is-present
+  namespace: d-testing
+  labels:
+    d-testing.dope.mayadata.io/inference: "true"
+spec:
+  tasks:
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-alertstore-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: alertstore
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-alertmanager-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: alertmanager
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-tablemanager-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: alertstore-tablemanager
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+  
+  # Check if ClusterIP is nil
+  - name: assert-if-ClusterIP-is-nil-in-cassandra-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: cassandra
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: Equals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-chat-server-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: chat-server
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-cloud-agent-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: cloud-agent-service
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-configs-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: configs
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+        
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-configs-db-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: configs-db
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-consul-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: consul
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-distributor-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: distributor
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not-nil-in-ingester-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: ingester
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not-nil-in-maya-grafana-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: maya-grafana-service
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not-nil-in-maya-io-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: maya-io
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not-nil-in-maya-ui-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: maya-ui
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is nil
+  - name: assert-if-ClusterIP-is-nil-in-memcached-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: memcached
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: Equals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not-nil-in-mysql-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: mysql
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-od-elasticsearch-logging-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: od-elasticsearch-logging
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-od-kobana-logging-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: od-kibana-logging
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-querier-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: querier
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-ruler-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: ruler
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
+    
+  # Check if ClusterIP is not nil
+  - name: assert-if-ClusterIP-is-not nil-in-table-manager-service
+    assert:
+      state:
+        kind: Service
+        apiVersion: v1
+        metadata:
+          name: table-manager
+          namespace: kubera
+      pathCheck:
+        path: spec.clusterIP
+        pathCheckOperator: NotEquals
+        value: None
