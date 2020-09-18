@@ -1,7 +1,9 @@
 name: Github action to create EKS cluster using eksctl and install DOP on it
 on:
   pull_request:
-    types: [opened, closed, push]
+    types: [opened, closed, edited]
+    branches:
+      - master
 
 jobs:
   lint_checker:
