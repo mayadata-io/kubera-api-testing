@@ -1,61 +1,82 @@
 name: Github action to create EKS cluster using eksctl and install DOP on it
-on: [push]
+on:
+  pull_request:
+    types: [opened, closed, edited]
 jobs:
-  build:
+  lint_checker:
     runs-on: ubuntu-latest
-    steps:    
+    steps:
     - name: Checkout code
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.29
 
     - name: Run Shellcheck
       uses: bewuethr/shellcheck-action@v2
-
-    - name: Install eksctl
+    
+    - name: Linter
       run: |
-        make eksctl-install
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+        golangci-lint --version
+
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:    
+  #   - name: Checkout code
+  #     uses: actions/checkout@master
+
+  #   - name: Run Shellcheck
+  #     uses: bewuethr/shellcheck-action@v2
+
+  #   - name: Install eksctl
+  #     run: |
+  #       make eksctl-install
   
-    - name: Configure AWS credentials
-      run: |
-        make configure-credential
-      env:
-        ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #   - name: Configure AWS credentials
+  #     run: |
+  #       make configure-credential
+  #     env:
+  #       ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-    - name: Create EKS cluster
-      run: |
-        make create-cluster
-      env:
-        VERSION: ${{ secrets.VERSION }}
-        REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #   - name: Create EKS cluster
+  #     run: |
+  #       make create-cluster
+  #     env:
+  #       VERSION: ${{ secrets.VERSION }}
+  #       REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-    - name: Install kubera on cluster
-      run: |
-        make install-kubera
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
-        GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-        GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-        KUBERA_BRANCH: ${{ secrets.KUBERA_BRANCH }}
-        RELEASE: ${{ secrets.RELEASE }}
-        USE_KUBERA_REPO: ${{ secrets.USE_KUBERA_REPO }}
+  #   - name: Install kubera on cluster
+  #     run: |
+  #       make install-kubera
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+  #       DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
+  #       GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+  #       GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+  #       KUBERA_BRANCH: ${{ secrets.KUBERA_BRANCH }}
+  #       RELEASE: ${{ secrets.RELEASE }}
+  #       USE_KUBERA_REPO: ${{ secrets.USE_KUBERA_REPO }}
 
 
-    - name: Apply d-operators based ci to the cluster
-      run: |
-        make d-operators
+  #   - name: Apply d-operators based ci to the cluster
+  #     run: |
+  #       make d-operators
 
-    - name: Sanity check for kubera components
-      run: |
-        make sanity-check
+  #   - name: Sanity check for kubera components
+  #     run: |
+  #       make sanity-check
 
-    - name: kubera cleanup
-      run: |
-        make kubera-cleanup
+  #   - name: kubera cleanup
+  #     run: |
+  #       make kubera-cleanup
       
-    - name: Cluster cleanup
-      run: |
-        make cluster-cleanup
-      if: always()
+  #   - name: Cluster cleanup
+  #     run: |
+  #       make cluster-cleanup
+  #     if: always()
         
