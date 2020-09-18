@@ -12,7 +12,7 @@ const (
 	kuberaPass = "KUBERA_PASS" //Kubera password
 )
 
-// Connection defines the structure of userCerdentials
+// Connection defines the structure of userCredentials
 type Connection struct {
 	HostName string
 	UserName string
@@ -52,5 +52,22 @@ func Get() Connection {
 		}
 	})
 	return connection
+
+}
+
+// GetHostName return the  kubera host(URL)
+func GetHostName() string {
+
+	if connection.HostName != "" {
+		return connection.HostName
+	}
+	var once sync.Once
+
+	once.Do(func() {
+		connection = Connection{
+			HostName: os.Getenv(kuberaHost),
+		}
+	})
+	return connection.HostName
 
 }

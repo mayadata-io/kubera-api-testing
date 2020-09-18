@@ -8,6 +8,7 @@ import (
 	conn "github.com/mayadata-io/kubera-api-testing/kubera/connection"
 )
 
+// Token struct of JWT token and AccountID
 type Token struct {
 	JWT       string `json:"jwt"`
 	AccountID string `json:"accountId"`
@@ -25,6 +26,7 @@ func (t Token) String() string {
 	return string(raw)
 }
 
+// APIError struct of error, error message, status code and status
 type APIError struct {
 	Err        error  `json:"err"`
 	Message    string `json:"message"`
@@ -44,9 +46,12 @@ func (e *APIError) Error() string {
 	return string(raw)
 }
 
+// KuberaError represent error message
 type KuberaError struct {
 	Message string `json:"message"`
 }
+
+// TokenFetching struct of token fetching connection
 type TokenFetching struct {
 	conn.Connection `json:"connection"`
 }
@@ -66,6 +71,7 @@ func (t TokenFetching) String() string {
 	return string(raw)
 }
 
+// TokenFetchingConfig is struct of connection
 type TokenFetchingConfig struct {
 	Connection conn.Connection
 }
@@ -78,13 +84,12 @@ func NewTokenFetcher(config TokenFetchingConfig) *TokenFetching {
 }
 
 // Fetch returns authenticated token
-func (f *TokenFetching) Fetch() (Token, error) {
+func (t *TokenFetching) Fetch() (Token, error) {
 	client := resty.New()
-	url := f.HostName + "v3/token"
 	token := Token{}
 	kErr := KuberaError{}
 	bodyData := map[string]interface{}{
-		"code":         fmt.Sprintf("%s:%s", f.UserName, f.Password),
+		"code":         fmt.Sprintf("%s:%s", t.UserName, t.Password),
 		"authProvider": "localAuthConfig",
 	}
 	resp, err := client.R().
@@ -96,7 +101,12 @@ func (f *TokenFetching) Fetch() (Token, error) {
 		//SetResult automatic unmarshalling for the request,
 		// if response status code is between 200 and 299
 		SetResult(&token).
-		Post(url)
+		Post(
+			fmt.Sprintf(
+				"%s/v3/token",
+				t.HostName,
+			),
+		)
 
 	if err != nil || kErr.Message != "" || !resp.IsSuccess() {
 		return Token{}, &APIError{
