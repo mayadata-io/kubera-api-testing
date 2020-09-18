@@ -1,14 +1,28 @@
 name: Github action to create EKS cluster using eksctl and install DOP on it
-on: [push]
+on:
+  pull_request:
+    types: [opened, closed]
+
 jobs:
+  lint_checker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.29
+
+    - name: Run Shellcheck
+      uses: bewuethr/shellcheck-action@v2
+  
   build:
     runs-on: ubuntu-latest
     steps:    
     - name: Checkout code
-      uses: actions/checkout@master
-
-    - name: Run Shellcheck
-      uses: bewuethr/shellcheck-action@v2
+      uses: actions/checkout@v2
 
     - name: Install eksctl
       run: |
